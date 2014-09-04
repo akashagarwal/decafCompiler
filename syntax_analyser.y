@@ -22,14 +22,12 @@
 program: CLASS PROGRAM '{' field_dec1 method_dec1 '}' ;
 
 field_dec1: field_dec1 field_dec
-			| field_dec
 			| /* empty */ ;
 
 method_dec1: method_dec1 method_dec
-			| method_dec
 			| /* empty */ ;
 			
-field_dec: type | field_dec3 ';' 
+field_dec: type field_dec3 ';' 
 
 field_dec3: field_dec3  field_dec2
 			| field_dec2 ;
@@ -49,7 +47,6 @@ method_dec3: '{' type id '}'
 block : '{' var_decl_x stetement_x '}' ;
 
 var_decl_x : var_decl_x var_decl 
-			| var_decl
 			| /* empty */ ;
 
 var_decl : type id_p ',' ;
@@ -57,7 +54,6 @@ var_decl : type id_p ',' ;
 type : INT |  BOOLEAN ;
 
 stetement_x : stetement_x statement 
-			| statement
 			| /* empty */ ;
 
 statement : location assign_op expr ';' 
@@ -75,7 +71,7 @@ assign_op : '='
 			| "+=" 
 			| "-=" ;
 
-method_call : method_name '(' '[' expr_p ',' ']'  ')'
+method_call : method_name '(' expr_x ')'
 			| CALLOUT '(' string_literal '[' ','  callout_arg_p ',' ']' ')' ;
 
 method_name : id ;
@@ -83,15 +79,15 @@ method_name : id ;
 location : id
 			| id '[' expr ']' ;
 
-expr_p : expr_p expr  
-			| expr ;
+expr_x : expr_x expr  
+			| /* empty */ ;	
 
 expr : location
 			| method_call
 			| literal
 			| expr bin_op expr
-			| '-' expr
-			| '!' expr 
+			| '-' '(' expr ')'
+			| '!' '(' expr ')'
 			| '(' expr ')' ;
 
 callout_arg_p : callout_arg_p callout_arg 
@@ -132,7 +128,7 @@ string_literal : STR_LIT ;
 
 %%
 
-int main()
+int main(int argc, char **argv)
 {
 	yyin=fopen(argv[1],"r");
 	yyparse();

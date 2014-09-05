@@ -17,6 +17,26 @@
 %token <char_val> CHAR_LIT
 %token <str_val> STR_LIT
 
+%left '+'
+%left '-'
+%left '*'
+%left '/'
+%left '%'
+%left '<'
+%left '>'
+%left "<="
+%left ">="
+%left "=="
+%left "!="
+%left "&&"
+%left "||"
+
+%left '('
+%left '['
+
+%right ')'
+%right ']'
+
 %%
 
 program: CLASS PROGRAM '{' field_dec1 method_dec1 '}' ;

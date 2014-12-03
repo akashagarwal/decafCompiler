@@ -24,12 +24,12 @@
 %left '%'
 %left '<'
 %left '>'
-%left "<="
-%left ">="
-%left "=="
-%left "!="
-%left "&&"
-%left "||"
+%left LE
+%left GE
+%left EQ
+%left NE
+%left AND
+%left OR
 
 %left '('
 %left '['
@@ -91,10 +91,9 @@ assign_op : '='
 			| "+=" 
 			| "-=" ;
 
-method_call : method_name '(' expr_x ')'
+method_call : id '(' expr_x ')'
 			| CALLOUT '(' string_literal '[' ','  callout_arg_p ',' ']' ')' ;
 
-method_name : id ;
 
 location : id
 			| id '[' expr ']' ;

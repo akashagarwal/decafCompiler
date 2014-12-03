@@ -109,8 +109,8 @@ expr : location
 			| '!' '(' expr ')'
 			| '(' expr ')' ;
 
-callout_arg_p : callout_arg_p callout_arg 
-			| callout_arg ;
+callout_arg_p :  callout_arg 
+			| ;
 
 callout_arg : expr | string_literal ;
 

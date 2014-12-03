@@ -13,7 +13,6 @@ Terminals unused in grammar
 State 62 conflicts: 1 shift/reduce
 State 129 conflicts: 1 shift/reduce
 State 137 conflicts: 13 shift/reduce
-State 138 conflicts: 1 shift/reduce
 
 
 Grammar
@@ -23,10 +22,10 @@ Grammar
     1 program: CLASS PROGRAM '{' field_dec1 method_dec1 '}'
 
     2 field_dec1: field_dec1 field_dec
-    3           | /* empty */
+    3           | %empty
 
     4 method_dec1: method_dec1 method_dec
-    5            | /* empty */
+    5            | %empty
 
     6 field_dec: type field_dec3 ';'
 
@@ -49,7 +48,7 @@ Grammar
    17 block: '{' var_decl_x stetement_x '}'
 
    18 var_decl_x: var_decl_x var_decl
-   19           | /* empty */
+   19           | %empty
 
    20 var_decl: type id_p ','
 
@@ -57,7 +56,7 @@ Grammar
    22     | BOOLEAN
 
    23 stetement_x: stetement_x statement
-   24            | /* empty */
+   24            | %empty
 
    25 statement: location assign_op expr ';'
    26          | method_call ';'
@@ -69,7 +68,7 @@ Grammar
    32          | block
 
    33 else_block: ELSE block
-   34           | /* empty */
+   34           | %empty
 
    35 assign_op: '='
    36          | "+="
@@ -82,7 +81,7 @@ Grammar
    41         | id '[' expr ']'
 
    42 expr_x: expr_x expr
-   43       | /* empty */
+   43       | %empty
 
    44 expr: location
    45     | method_call
@@ -92,8 +91,8 @@ Grammar
    49     | '!' '(' expr ')'
    50     | '(' expr ')'
 
-   51 callout_arg_p: callout_arg_p callout_arg
-   52              | callout_arg
+   51 callout_arg_p: callout_arg
+   52              | %empty
 
    53 callout_arg: expr
    54            | string_literal
@@ -252,9 +251,9 @@ expr (77)
     on left: 44 45 46 47 48 49 50, on right: 25 27 28 29 41 42 47 48
     49 50 53
 callout_arg_p (78)
-    on left: 51 52, on right: 39 51
+    on left: 51 52, on right: 39
 callout_arg (79)
-    on left: 53 54, on right: 51 52
+    on left: 53 54, on right: 51
 bin_op (80)
     on left: 55 56 57 58, on right: 47
 arith_op (81)
@@ -1661,6 +1660,8 @@ State 131
     '('         shift, and go to state 87
     '!'         shift, and go to state 88
 
+    $default  reduce using rule 52 (callout_arg_p)
+
     method_call      go to state 89
     location         go to state 90
     expr             go to state 138
@@ -1835,7 +1836,6 @@ State 138
     "&&"  shift, and go to state 119
     "||"  shift, and go to state 120
 
-    '-'       [reduce using rule 53 (callout_arg)]
     $default  reduce using rule 53 (callout_arg)
 
     bin_op    go to state 121
@@ -1848,40 +1848,15 @@ State 138
 State 139
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p . ',' ']' ')'
-   51 callout_arg_p: callout_arg_p . callout_arg
 
-    CALLOUT     shift, and go to state 52
-    TRUE        shift, and go to state 81
-    FALSE       shift, and go to state 82
-    IDENTIFIER  shift, and go to state 21
-    HEX_LIT     shift, and go to state 83
-    INT_LIT     shift, and go to state 84
-    CHAR_LIT    shift, and go to state 85
-    STR_LIT     shift, and go to state 78
-    '-'         shift, and go to state 86
-    '('         shift, and go to state 87
-    ','         shift, and go to state 147
-    '!'         shift, and go to state 88
-
-    method_call      go to state 89
-    location         go to state 90
-    expr             go to state 138
-    callout_arg      go to state 148
-    literal          go to state 92
-    id               go to state 62
-    int_literal      go to state 93
-    decimal_literal  go to state 94
-    hex_literal      go to state 95
-    bool_literal     go to state 96
-    char_literal     go to state 97
-    string_literal   go to state 141
+    ','  shift, and go to state 147
 
 
 State 140
 
-   52 callout_arg_p: callout_arg .
+   51 callout_arg_p: callout_arg .
 
-    $default  reduce using rule 52 (callout_arg_p)
+    $default  reduce using rule 51 (callout_arg_p)
 
 
 State 141
@@ -1911,7 +1886,7 @@ State 142
     "&&"  shift, and go to state 119
     "||"  shift, and go to state 120
 
-    block     go to state 149
+    block     go to state 148
     bin_op    go to state 121
     arith_op  go to state 122
     rel_op    go to state 123
@@ -1939,7 +1914,7 @@ State 145
 
     '{'  shift, and go to state 43
 
-    block  go to state 150
+    block  go to state 149
 
 
 State 146
@@ -1953,38 +1928,31 @@ State 147
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p ',' . ']' ')'
 
-    ']'  shift, and go to state 151
+    ']'  shift, and go to state 150
 
 
 State 148
-
-   51 callout_arg_p: callout_arg_p callout_arg .
-
-    $default  reduce using rule 51 (callout_arg_p)
-
-
-State 149
 
    28 statement: FOR id '=' expr ',' expr block .
 
     $default  reduce using rule 28 (statement)
 
 
-State 150
+State 149
 
    33 else_block: ELSE block .
 
     $default  reduce using rule 33 (else_block)
 
 
-State 151
+State 150
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p ',' ']' . ')'
 
-    ')'  shift, and go to state 152
+    ')'  shift, and go to state 151
 
 
-State 152
+State 151
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p ',' ']' ')' .
 

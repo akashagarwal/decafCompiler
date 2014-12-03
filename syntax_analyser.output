@@ -10,11 +10,6 @@ Terminals unused in grammar
    OR
 
 
-State 62 conflicts: 1 shift/reduce
-State 129 conflicts: 1 shift/reduce
-State 137 conflicts: 13 shift/reduce
-
-
 Grammar
 
     0 $accept: program $end
@@ -80,13 +75,14 @@ Grammar
    40 location: id
    41         | id '[' expr ']'
 
-   42 expr_x: expr_x expr
-   43       | %empty
+   42 expr_x: expr_r expr
+
+   43 expr_r: expr ','
 
    44 expr: location
    45     | method_call
    46     | literal
-   47     | expr bin_op expr
+   47     | '(' expr bin_op expr ')'
    48     | '-' '(' expr ')'
    49     | '!' '(' expr ')'
    50     | '(' expr ')'
@@ -148,11 +144,11 @@ Terminals, with rules where they appear
 $end (0) 0
 '!' (33) 49
 '%' (37) 63
-'(' (40) 11 27 38 39 48 49 50
-')' (41) 11 27 38 39 48 49 50
+'(' (40) 11 27 38 39 47 48 49 50
+')' (41) 11 27 38 39 47 48 49 50
 '*' (42) 61
 '+' (43) 59
-',' (44) 11 20 28 39
+',' (44) 11 20 28 39 43
 '-' (45) 48 60
 '/' (47) 62
 ';' (59) 6 25 26 30 31
@@ -246,41 +242,43 @@ method_call (74)
 location (75)
     on left: 40 41, on right: 25 44
 expr_x (76)
-    on left: 42 43, on right: 38 42
-expr (77)
-    on left: 44 45 46 47 48 49 50, on right: 25 27 28 29 41 42 47 48
-    49 50 53
-callout_arg_p (78)
+    on left: 42, on right: 38
+expr_r (77)
+    on left: 43, on right: 42
+expr (78)
+    on left: 44 45 46 47 48 49 50, on right: 25 27 28 29 41 42 43 47
+    48 49 50 53
+callout_arg_p (79)
     on left: 51 52, on right: 39
-callout_arg (79)
+callout_arg (80)
     on left: 53 54, on right: 51
-bin_op (80)
+bin_op (81)
     on left: 55 56 57 58, on right: 47
-arith_op (81)
+arith_op (82)
     on left: 59 60 61 62 63, on right: 55
-rel_op (82)
+rel_op (83)
     on left: 64 65 66 67, on right: 56
-eq_op (83)
+eq_op (84)
     on left: 68 69, on right: 57
-cond_op (84)
+cond_op (85)
     on left: 70 71, on right: 58
-literal (85)
+literal (86)
     on left: 72 73 74, on right: 46
-id_p (86)
+id_p (87)
     on left: 75 76, on right: 20 75
-id (87)
+id (88)
     on left: 77, on right: 9 10 11 16 28 38 40 41 75 76
-int_literal (88)
+int_literal (89)
     on left: 78 79, on right: 72
-decimal_literal (89)
+decimal_literal (90)
     on left: 80, on right: 78
-hex_literal (90)
+hex_literal (91)
     on left: 81, on right: 79
-bool_literal (91)
+bool_literal (92)
     on left: 82 83, on right: 74
-char_literal (92)
+char_literal (93)
     on left: 84, on right: 73
-string_literal (93)
+string_literal (94)
     on left: 85, on right: 39 54
 
 
@@ -814,7 +812,6 @@ State 62
     '('  shift, and go to state 76
     '['  shift, and go to state 77
 
-    '('       [reduce using rule 40 (location)]
     $default  reduce using rule 40 (location)
 
 
@@ -975,9 +972,29 @@ State 76
 
    38 method_call: id '(' . expr_x ')'
 
-    $default  reduce using rule 43 (expr_x)
+    CALLOUT     shift, and go to state 52
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    IDENTIFIER  shift, and go to state 21
+    HEX_LIT     shift, and go to state 83
+    INT_LIT     shift, and go to state 84
+    CHAR_LIT    shift, and go to state 85
+    '-'         shift, and go to state 86
+    '('         shift, and go to state 87
+    '!'         shift, and go to state 88
 
-    expr_x  go to state 100
+    method_call      go to state 89
+    location         go to state 90
+    expr_x           go to state 100
+    expr_r           go to state 101
+    expr             go to state 102
+    literal          go to state 92
+    id               go to state 62
+    int_literal      go to state 93
+    decimal_literal  go to state 94
+    hex_literal      go to state 95
+    bool_literal     go to state 96
+    char_literal     go to state 97
 
 
 State 77
@@ -997,7 +1014,7 @@ State 77
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 101
+    expr             go to state 103
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1018,7 +1035,7 @@ State 79
 
    39 method_call: CALLOUT '(' string_literal . '[' ',' callout_arg_p ',' ']' ')'
 
-    '['  shift, and go to state 102
+    '['  shift, and go to state 104
 
 
 State 80
@@ -1038,7 +1055,7 @@ State 80
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 103
+    expr             go to state 105
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1087,12 +1104,13 @@ State 86
 
    48 expr: '-' . '(' expr ')'
 
-    '('  shift, and go to state 104
+    '('  shift, and go to state 106
 
 
 State 87
 
-   50 expr: '(' . expr ')'
+   47 expr: '(' . expr bin_op expr ')'
+   50     | '(' . expr ')'
 
     CALLOUT     shift, and go to state 52
     TRUE        shift, and go to state 81
@@ -1107,7 +1125,7 @@ State 87
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 105
+    expr             go to state 107
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1121,7 +1139,7 @@ State 88
 
    49 expr: '!' . '(' expr ')'
 
-    '('  shift, and go to state 106
+    '('  shift, and go to state 108
 
 
 State 89
@@ -1141,28 +1159,8 @@ State 90
 State 91
 
    27 statement: IF '(' expr . ')' block else_block
-   47 expr: expr . bin_op expr
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ')'   shift, and go to state 114
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    ')'  shift, and go to state 109
 
 
 State 92
@@ -1210,61 +1208,27 @@ State 97
 State 98
 
    29 statement: RETURN '[' expr . ']'
-   47 expr: expr . bin_op expr
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ']'   shift, and go to state 126
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    ']'  shift, and go to state 110
 
 
 State 99
 
    25 statement: location assign_op expr . ';'
-   47 expr: expr . bin_op expr
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ';'   shift, and go to state 127
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    ';'  shift, and go to state 111
 
 
 State 100
 
    38 method_call: id '(' expr_x . ')'
-   42 expr_x: expr_x . expr
+
+    ')'  shift, and go to state 112
+
+
+State 101
+
+   42 expr_x: expr_r . expr
 
     CALLOUT     shift, and go to state 52
     TRUE        shift, and go to state 81
@@ -1275,12 +1239,11 @@ State 100
     CHAR_LIT    shift, and go to state 85
     '-'         shift, and go to state 86
     '('         shift, and go to state 87
-    ')'         shift, and go to state 128
     '!'         shift, and go to state 88
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 129
+    expr             go to state 113
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1290,68 +1253,35 @@ State 100
     char_literal     go to state 97
 
 
-State 101
-
-   41 location: id '[' expr . ']'
-   47 expr: expr . bin_op expr
-
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ']'   shift, and go to state 130
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
-
-
 State 102
 
-   39 method_call: CALLOUT '(' string_literal '[' . ',' callout_arg_p ',' ']' ')'
+   43 expr_r: expr . ','
 
-    ','  shift, and go to state 131
+    ','  shift, and go to state 114
 
 
 State 103
 
-   28 statement: FOR id '=' expr . ',' expr block
-   47 expr: expr . bin_op expr
+   41 location: id '[' expr . ']'
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ','   shift, and go to state 132
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    ']'  shift, and go to state 115
 
 
 State 104
+
+   39 method_call: CALLOUT '(' string_literal '[' . ',' callout_arg_p ',' ']' ')'
+
+    ','  shift, and go to state 116
+
+
+State 105
+
+   28 statement: FOR id '=' expr . ',' expr block
+
+    ','  shift, and go to state 117
+
+
+State 106
 
    48 expr: '-' '(' . expr ')'
 
@@ -1368,7 +1298,7 @@ State 104
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 133
+    expr             go to state 118
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1378,34 +1308,34 @@ State 104
     char_literal     go to state 97
 
 
-State 105
+State 107
 
-   47 expr: expr . bin_op expr
+   47 expr: '(' expr . bin_op expr ')'
    50     | '(' expr . ')'
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ')'   shift, and go to state 134
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
+    '+'   shift, and go to state 119
+    '-'   shift, and go to state 120
+    '*'   shift, and go to state 121
+    '/'   shift, and go to state 122
+    '%'   shift, and go to state 123
+    '<'   shift, and go to state 124
+    '>'   shift, and go to state 125
+    ')'   shift, and go to state 126
+    "<="  shift, and go to state 127
+    ">="  shift, and go to state 128
+    "=="  shift, and go to state 129
+    "!="  shift, and go to state 130
+    "&&"  shift, and go to state 131
+    "||"  shift, and go to state 132
 
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    bin_op    go to state 133
+    arith_op  go to state 134
+    rel_op    go to state 135
+    eq_op     go to state 136
+    cond_op   go to state 137
 
 
-State 106
+State 108
 
    49 expr: '!' '(' . expr ')'
 
@@ -1422,7 +1352,7 @@ State 106
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 135
+    expr             go to state 138
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1432,219 +1362,58 @@ State 106
     char_literal     go to state 97
 
 
-State 107
-
-   59 arith_op: '+' .
-
-    $default  reduce using rule 59 (arith_op)
-
-
-State 108
-
-   60 arith_op: '-' .
-
-    $default  reduce using rule 60 (arith_op)
-
-
 State 109
-
-   61 arith_op: '*' .
-
-    $default  reduce using rule 61 (arith_op)
-
-
-State 110
-
-   62 arith_op: '/' .
-
-    $default  reduce using rule 62 (arith_op)
-
-
-State 111
-
-   63 arith_op: '%' .
-
-    $default  reduce using rule 63 (arith_op)
-
-
-State 112
-
-   64 rel_op: '<' .
-
-    $default  reduce using rule 64 (rel_op)
-
-
-State 113
-
-   65 rel_op: '>' .
-
-    $default  reduce using rule 65 (rel_op)
-
-
-State 114
 
    27 statement: IF '(' expr ')' . block else_block
 
     '{'  shift, and go to state 43
 
-    block  go to state 136
+    block  go to state 139
 
 
-State 115
-
-   66 rel_op: "<=" .
-
-    $default  reduce using rule 66 (rel_op)
-
-
-State 116
-
-   67 rel_op: ">=" .
-
-    $default  reduce using rule 67 (rel_op)
-
-
-State 117
-
-   68 eq_op: "==" .
-
-    $default  reduce using rule 68 (eq_op)
-
-
-State 118
-
-   69 eq_op: "!=" .
-
-    $default  reduce using rule 69 (eq_op)
-
-
-State 119
-
-   70 cond_op: "&&" .
-
-    $default  reduce using rule 70 (cond_op)
-
-
-State 120
-
-   71 cond_op: "||" .
-
-    $default  reduce using rule 71 (cond_op)
-
-
-State 121
-
-   47 expr: expr bin_op . expr
-
-    CALLOUT     shift, and go to state 52
-    TRUE        shift, and go to state 81
-    FALSE       shift, and go to state 82
-    IDENTIFIER  shift, and go to state 21
-    HEX_LIT     shift, and go to state 83
-    INT_LIT     shift, and go to state 84
-    CHAR_LIT    shift, and go to state 85
-    '-'         shift, and go to state 86
-    '('         shift, and go to state 87
-    '!'         shift, and go to state 88
-
-    method_call      go to state 89
-    location         go to state 90
-    expr             go to state 137
-    literal          go to state 92
-    id               go to state 62
-    int_literal      go to state 93
-    decimal_literal  go to state 94
-    hex_literal      go to state 95
-    bool_literal     go to state 96
-    char_literal     go to state 97
-
-
-State 122
-
-   55 bin_op: arith_op .
-
-    $default  reduce using rule 55 (bin_op)
-
-
-State 123
-
-   56 bin_op: rel_op .
-
-    $default  reduce using rule 56 (bin_op)
-
-
-State 124
-
-   57 bin_op: eq_op .
-
-    $default  reduce using rule 57 (bin_op)
-
-
-State 125
-
-   58 bin_op: cond_op .
-
-    $default  reduce using rule 58 (bin_op)
-
-
-State 126
+State 110
 
    29 statement: RETURN '[' expr ']' .
 
     $default  reduce using rule 29 (statement)
 
 
-State 127
+State 111
 
    25 statement: location assign_op expr ';' .
 
     $default  reduce using rule 25 (statement)
 
 
-State 128
+State 112
 
    38 method_call: id '(' expr_x ')' .
 
     $default  reduce using rule 38 (method_call)
 
 
-State 129
+State 113
 
-   42 expr_x: expr_x expr .
-   47 expr: expr . bin_op expr
+   42 expr_x: expr_r expr .
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    '-'       [reduce using rule 42 (expr_x)]
     $default  reduce using rule 42 (expr_x)
 
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+
+State 114
+
+   43 expr_r: expr ',' .
+
+    $default  reduce using rule 43 (expr_r)
 
 
-State 130
+State 115
 
    41 location: id '[' expr ']' .
 
     $default  reduce using rule 41 (location)
 
 
-State 131
+State 116
 
    39 method_call: CALLOUT '(' string_literal '[' ',' . callout_arg_p ',' ']' ')'
 
@@ -1664,9 +1433,9 @@ State 131
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 138
-    callout_arg_p    go to state 139
-    callout_arg      go to state 140
+    expr             go to state 140
+    callout_arg_p    go to state 141
+    callout_arg      go to state 142
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1674,10 +1443,10 @@ State 131
     hex_literal      go to state 95
     bool_literal     go to state 96
     char_literal     go to state 97
-    string_literal   go to state 141
+    string_literal   go to state 143
 
 
-State 132
+State 117
 
    28 statement: FOR id '=' expr ',' . expr block
 
@@ -1694,7 +1463,7 @@ State 132
 
     method_call      go to state 89
     location         go to state 90
-    expr             go to state 142
+    expr             go to state 144
     literal          go to state 92
     id               go to state 62
     int_literal      go to state 93
@@ -1704,255 +1473,294 @@ State 132
     char_literal     go to state 97
 
 
-State 133
+State 118
 
-   47 expr: expr . bin_op expr
-   48     | '-' '(' expr . ')'
+   48 expr: '-' '(' expr . ')'
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ')'   shift, and go to state 143
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    ')'  shift, and go to state 145
 
 
-State 134
+State 119
+
+   59 arith_op: '+' .
+
+    $default  reduce using rule 59 (arith_op)
+
+
+State 120
+
+   60 arith_op: '-' .
+
+    $default  reduce using rule 60 (arith_op)
+
+
+State 121
+
+   61 arith_op: '*' .
+
+    $default  reduce using rule 61 (arith_op)
+
+
+State 122
+
+   62 arith_op: '/' .
+
+    $default  reduce using rule 62 (arith_op)
+
+
+State 123
+
+   63 arith_op: '%' .
+
+    $default  reduce using rule 63 (arith_op)
+
+
+State 124
+
+   64 rel_op: '<' .
+
+    $default  reduce using rule 64 (rel_op)
+
+
+State 125
+
+   65 rel_op: '>' .
+
+    $default  reduce using rule 65 (rel_op)
+
+
+State 126
 
    50 expr: '(' expr ')' .
 
     $default  reduce using rule 50 (expr)
 
 
+State 127
+
+   66 rel_op: "<=" .
+
+    $default  reduce using rule 66 (rel_op)
+
+
+State 128
+
+   67 rel_op: ">=" .
+
+    $default  reduce using rule 67 (rel_op)
+
+
+State 129
+
+   68 eq_op: "==" .
+
+    $default  reduce using rule 68 (eq_op)
+
+
+State 130
+
+   69 eq_op: "!=" .
+
+    $default  reduce using rule 69 (eq_op)
+
+
+State 131
+
+   70 cond_op: "&&" .
+
+    $default  reduce using rule 70 (cond_op)
+
+
+State 132
+
+   71 cond_op: "||" .
+
+    $default  reduce using rule 71 (cond_op)
+
+
+State 133
+
+   47 expr: '(' expr bin_op . expr ')'
+
+    CALLOUT     shift, and go to state 52
+    TRUE        shift, and go to state 81
+    FALSE       shift, and go to state 82
+    IDENTIFIER  shift, and go to state 21
+    HEX_LIT     shift, and go to state 83
+    INT_LIT     shift, and go to state 84
+    CHAR_LIT    shift, and go to state 85
+    '-'         shift, and go to state 86
+    '('         shift, and go to state 87
+    '!'         shift, and go to state 88
+
+    method_call      go to state 89
+    location         go to state 90
+    expr             go to state 146
+    literal          go to state 92
+    id               go to state 62
+    int_literal      go to state 93
+    decimal_literal  go to state 94
+    hex_literal      go to state 95
+    bool_literal     go to state 96
+    char_literal     go to state 97
+
+
+State 134
+
+   55 bin_op: arith_op .
+
+    $default  reduce using rule 55 (bin_op)
+
+
 State 135
 
-   47 expr: expr . bin_op expr
-   49     | '!' '(' expr . ')'
+   56 bin_op: rel_op .
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    ')'   shift, and go to state 144
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    $default  reduce using rule 56 (bin_op)
 
 
 State 136
 
-   27 statement: IF '(' expr ')' block . else_block
+   57 bin_op: eq_op .
 
-    ELSE  shift, and go to state 145
-
-    $default  reduce using rule 34 (else_block)
-
-    else_block  go to state 146
+    $default  reduce using rule 57 (bin_op)
 
 
 State 137
 
-   47 expr: expr . bin_op expr
-   47     | expr bin_op expr .
+   58 bin_op: cond_op .
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    '+'       [reduce using rule 47 (expr)]
-    '-'       [reduce using rule 47 (expr)]
-    '*'       [reduce using rule 47 (expr)]
-    '/'       [reduce using rule 47 (expr)]
-    '%'       [reduce using rule 47 (expr)]
-    '<'       [reduce using rule 47 (expr)]
-    '>'       [reduce using rule 47 (expr)]
-    "<="      [reduce using rule 47 (expr)]
-    ">="      [reduce using rule 47 (expr)]
-    "=="      [reduce using rule 47 (expr)]
-    "!="      [reduce using rule 47 (expr)]
-    "&&"      [reduce using rule 47 (expr)]
-    "||"      [reduce using rule 47 (expr)]
-    $default  reduce using rule 47 (expr)
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    $default  reduce using rule 58 (bin_op)
 
 
 State 138
 
-   47 expr: expr . bin_op expr
-   53 callout_arg: expr .
+   49 expr: '!' '(' expr . ')'
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
-
-    $default  reduce using rule 53 (callout_arg)
-
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    ')'  shift, and go to state 147
 
 
 State 139
 
-   39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p . ',' ']' ')'
+   27 statement: IF '(' expr ')' block . else_block
 
-    ','  shift, and go to state 147
+    ELSE  shift, and go to state 148
+
+    $default  reduce using rule 34 (else_block)
+
+    else_block  go to state 149
 
 
 State 140
+
+   53 callout_arg: expr .
+
+    $default  reduce using rule 53 (callout_arg)
+
+
+State 141
+
+   39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p . ',' ']' ')'
+
+    ','  shift, and go to state 150
+
+
+State 142
 
    51 callout_arg_p: callout_arg .
 
     $default  reduce using rule 51 (callout_arg_p)
 
 
-State 141
+State 143
 
    54 callout_arg: string_literal .
 
     $default  reduce using rule 54 (callout_arg)
 
 
-State 142
+State 144
 
    28 statement: FOR id '=' expr ',' expr . block
-   47 expr: expr . bin_op expr
 
-    '+'   shift, and go to state 107
-    '-'   shift, and go to state 108
-    '*'   shift, and go to state 109
-    '/'   shift, and go to state 110
-    '%'   shift, and go to state 111
-    '<'   shift, and go to state 112
-    '>'   shift, and go to state 113
-    '{'   shift, and go to state 43
-    "<="  shift, and go to state 115
-    ">="  shift, and go to state 116
-    "=="  shift, and go to state 117
-    "!="  shift, and go to state 118
-    "&&"  shift, and go to state 119
-    "||"  shift, and go to state 120
+    '{'  shift, and go to state 43
 
-    block     go to state 148
-    bin_op    go to state 121
-    arith_op  go to state 122
-    rel_op    go to state 123
-    eq_op     go to state 124
-    cond_op   go to state 125
+    block  go to state 151
 
 
-State 143
+State 145
 
    48 expr: '-' '(' expr ')' .
 
     $default  reduce using rule 48 (expr)
 
 
-State 144
+State 146
+
+   47 expr: '(' expr bin_op expr . ')'
+
+    ')'  shift, and go to state 152
+
+
+State 147
 
    49 expr: '!' '(' expr ')' .
 
     $default  reduce using rule 49 (expr)
 
 
-State 145
+State 148
 
    33 else_block: ELSE . block
 
     '{'  shift, and go to state 43
 
-    block  go to state 149
+    block  go to state 153
 
 
-State 146
+State 149
 
    27 statement: IF '(' expr ')' block else_block .
 
     $default  reduce using rule 27 (statement)
 
 
-State 147
+State 150
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p ',' . ']' ')'
 
-    ']'  shift, and go to state 150
+    ']'  shift, and go to state 154
 
 
-State 148
+State 151
 
    28 statement: FOR id '=' expr ',' expr block .
 
     $default  reduce using rule 28 (statement)
 
 
-State 149
+State 152
+
+   47 expr: '(' expr bin_op expr ')' .
+
+    $default  reduce using rule 47 (expr)
+
+
+State 153
 
    33 else_block: ELSE block .
 
     $default  reduce using rule 33 (else_block)
 
 
-State 150
+State 154
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p ',' ']' . ')'
 
-    ')'  shift, and go to state 151
+    ')'  shift, and go to state 155
 
 
-State 151
+State 155
 
    39 method_call: CALLOUT '(' string_literal '[' ',' callout_arg_p ',' ']' ')' .
 

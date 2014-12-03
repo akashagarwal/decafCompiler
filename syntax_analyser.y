@@ -104,10 +104,11 @@ expr_r : expr ',';
 expr : location
 			| method_call
 			| literal
-			| expr bin_op expr
+			|  '(' expr bin_op expr ')'
 			| '-' '(' expr ')'
 			| '!' '(' expr ')'
 			| '(' expr ')' ;
+
 
 callout_arg_p :  callout_arg 
 			| ;

@@ -98,8 +98,8 @@ method_call : id '(' expr_x ')'
 location : id
 			| id '[' expr ']' ;
 
-expr_x : expr_x expr  
-			| /* empty */ ;	
+expr_x : expr_r expr  ;
+expr_r : expr ',';
 
 expr : location
 			| method_call

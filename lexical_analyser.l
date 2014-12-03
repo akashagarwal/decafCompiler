@@ -11,7 +11,7 @@ HEX 0x[0-9a-fA-F]
 ID [a-zA-Z_][0-9a-zA-Z]*
 COMMENTS //[0-9a-zA-Z]*
 NEWLINE \n
-%%
+%%	
 "Program" 	{return PROGRAM;}
 
 "boolean"	{return BOOLEAN;}

@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<string.h>
 #include "syntax_analyser.tab.h"
-int line=0;
+int line=1;
 %}
 
 WS [ \t]+
@@ -10,7 +10,6 @@ NUM [0-9]+
 HEX 0x[0-9a-fA-F]
 ID [a-zA-Z_][0-9a-zA-Z]*
 COMMENTS //[0-9a-zA-Z]*
-NEWLINE \n
 %%	
 "Program" 	{return PROGRAM;}
 
@@ -22,14 +21,15 @@ NEWLINE \n
 "else" 		{return ELSE;}
 "for" 		{return FOR;}
 "if"		{return IF;}
-"int"		{return INT;}
+"int"		{return INT;} 
 "return"	{return RETURN;}
-"true"		{return TRUE;}
-"false"		{return FALSE;}
+"true"		{ return TRUE;}
+"false"		{ return FALSE;}
 "void"		{return VOID;}
 
-NEWLINE 	{
+"\n" 	{
 		/*NO ACTION TO BE TAKEN FOR NEWLINE*/
+		printf("line -- %d \n",line);
 		line++;
 		}
 COMMENTS	{/*NO ACTION TO BE TAKEN FOR COMMENTS*/}
@@ -65,6 +65,10 @@ WS		{/*NO ACTION TO BE TAKEN FOR WHITESPACES*/}
 "&&"		{return AND;}
 "||"		{return OR;}
 
+"+="		{return PEQ;}
+"-="		{return MEQ;}
+
+
 "+" |
 "-" |
 "*" |
@@ -77,8 +81,12 @@ WS		{/*NO ACTION TO BE TAKEN FOR WHITESPACES*/}
 "{" |
 "}" |
 "=" |
+";" |
+"," |
+
 "!"		{
 			/*yylvL.c=yytext[0];*/
+			//printf("%c",yytext[0]);
 			return yytext[0];
 		}
 

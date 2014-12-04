@@ -1,3 +1,25 @@
 class Program {
-	{ 10 } num ( [ { 10 x123 } , ] ) {   } ;
+	int { a [ 464 ]},{b},{c[23141]}  ;
+	boolean {a} ;
+	{ boolean } main ( [ { int a } , { boolean b } ] ) 
+	{ 
+		int a,b,c ; boolean b ;
+		{} 
+		a124 += 6465;
+		a523 (351,523 , 'a' , true ) ;
+		callout ( "aksd" [ "sfasf",false,2523,'c' ] );
+		if ( 64 ) {} []
+		if ( 64 ) {} [else {}]
+		for axaa = 564 , 10000 {}
+		return [ 45646 ] ;
+		break;
+		continue;
+		return [ sadas ];
+		return [ afhl (4452) ];
+		return [ 4566 ];
+		return [ ( 324 + (465*(56564-64)) ) ];
+		return [ - (456) ];
+		return [!(556)];
+		return [ (456) ];
+	}
 }

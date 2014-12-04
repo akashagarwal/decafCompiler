@@ -1,4 +1,4 @@
-bison -d syntax_analyser.y --debug --verbose
+bison -d syntax_analyser.yy
 flex lexical_analyser.l
-gcc lex.yy.c syntax_analyser.tab.c syntax_analyser.tab.h -lfl
-rm lex.yy.c syntax_analyser.tab.c syntax_analyser.tab.h
+g++ lex.yy.c syntax_analyser.tab.cc syntax_analyser.tab.hh -lfl
+rm lex.* syntax_analyser.tab*

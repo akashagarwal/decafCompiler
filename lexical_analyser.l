@@ -1,7 +1,8 @@
+%option noyywrap
 %{
 #include<stdio.h>
 #include<string.h>
-#include "syntax_analyser.tab.h"
+#include "syntax_analyser.tab.hh"
 int line=1;
 %}
 

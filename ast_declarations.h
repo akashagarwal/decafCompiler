@@ -2,8 +2,9 @@
 #include "ast_main.h"
 using namespace std;
 
-class declaration : public ast_main_node{
-	
+
+
+class declaration : public ast_main_node {
 };
 
 class variable_declaration : public declaration{
@@ -11,9 +12,11 @@ class variable_declaration : public declaration{
 		string type;
 		list <string> *id_list;
 	public:
-		variable_declaration(string t , list<string> *l){
+		variable_declaration(string t , list<string> *l)
+		{
 			this->type=t;
-			this->id_list=l;}
+			this->id_list=l;
+		}
 };
 
 class variable_declaration_list : public declaration{

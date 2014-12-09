@@ -2,11 +2,13 @@
 #include "ast_main.h"
 using namespace std;
 
-
+class block;
 
 class declaration : public ast_main_node {
 };
 
+
+/*------------------------------variable declarations ---------------------------*/
 class variable_declaration : public declaration{
 	protected:
 		string type;
@@ -32,6 +34,7 @@ class variable_declaration_list : public declaration{
 			this->var_dec_list->push_back(v);
 		}
 };
+/*------------------------------field declarations ---------------------------*/
 class field: public declaration {
 };
 
@@ -80,12 +83,13 @@ class field_declaration_list : public declaration{
 		}
 };
 
+/*------------------------------method declarations ---------------------------*/
 class method_declaration : public declaration {
 	protected:
 		string type;
 		string method_name;
 		variable_declaration_list *method_var_dec_list;
-//		block * method_block;
+		block * method_block;
 };
 
 class method_declaration_list : public declaration {

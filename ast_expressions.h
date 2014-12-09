@@ -141,8 +141,6 @@ class expression_method_call : public expression {
 			this->method=m;
 		}
 };
-
-
 class expression_location : public expression {
 	protected:
 		location *loc;

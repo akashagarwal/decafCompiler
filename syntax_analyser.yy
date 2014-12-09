@@ -1,7 +1,11 @@
 %{
 	#include<stdio.h>
 	#include<stdlib.h>
-	using namespace std;
+	#include "llvm/IR/DerivedTypes.h"
+	#include "llvm/IR/IRBuilder.h"
+	#include "llvm/IR/LLVMContext.h"
+	#include "llvm/IR/Module.h"
+	using namespace llvm;
 	extern FILE *yyin;
 	void yyerror(const char*);
 	extern int yylex();

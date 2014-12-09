@@ -8,7 +8,7 @@ class types : public ast_main_node {
 
 };
 
-
+/*------------------------operations------------------*/
 class operations : public types {
 
 };
@@ -45,6 +45,7 @@ class conditional_op : public operations {
 		conditional_op(char op){
 			this->op=op;}
 } ;
+/*------------------------identifiers------------------*/
 
 class id : public types {
 	protected:
@@ -53,10 +54,7 @@ class id : public types {
 		id(string s){
 			this->id_name=s;}
 };
-class literal : public types {
-
-};
-
+/*------------------------string literals------------------*/
 class string_literal : public types {
 	protected:
 		string string_lit;
@@ -64,6 +62,13 @@ class string_literal : public types {
 		string_literal(string s){
 			this->string_lit=s;}
 };
+
+
+/*------------------literals-------------------------------*/
+class literal : public types {
+
+};
+
 
 class int_literal : public literal {
 };

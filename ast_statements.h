@@ -26,7 +26,7 @@ class statement_list : public ast_main_node{
 			this->stat_list->push_back(stat);
 		}
 };
-
+/*------------------bloack declarations----------------------------------*/
 class block : public ast_main_node {
 	protected:
 		variable_declaration_list *var_dec_list;
@@ -39,7 +39,7 @@ class block : public ast_main_node {
 		}
 };
 
-
+/*-----------------types of statements------------------------------------*/
 class statement_assign : public statement {
 	protected:
 		char assign_operator;

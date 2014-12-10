@@ -1,0 +1,6 @@
+declare void @main()
+
+define double @"fn op plus"(double, double) {
+entry:
+  ret double 0.000000e+00
+}

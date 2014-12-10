@@ -141,14 +141,22 @@ class EXPRESSION_OPERATION : public EXPRESSION {
 			this->expr_right=e2;
 			this->op=oper;
 
-			string Name="fn op plus";
+			string Name="main";
 			cout << "\n\n\nGenerating LLVM IR...\n\n";
 			using namespace llvm;
 
-			std::vector<Type*> Doubles(2,Type::getDoubleTy(getGlobalContext()));
-  			FunctionType *FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()),Doubles, false);
+  			FunctionType *FT = FunctionType::get(Type::getVoidTy(getGlobalContext()),false);
   
   			Function *F = Function::Create(FT, Function::ExternalLinkage, Name, TheModule);
+
+
+
+			Name="fn op plus";
+
+			std::vector<Type*> Doubles(2,Type::getDoubleTy(getGlobalContext()));
+  			FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()),Doubles, false);
+  
+  			F = Function::Create(FT, Function::ExternalLinkage, Name, TheModule);
   
   			unsigned Idx = 0;
 

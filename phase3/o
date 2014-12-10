@@ -1,0 +1,185 @@
+  field_dec1-2
+line -- 1 
+	type-int
+  identifier a
+  ahem ahem 464
+ field_dec2-2
+field_dec3-2
+identifier b
+field_dec2-1
+field_dec3-1
+identifier c
+ahem ahem 23141
+field_dec2-2
+field_dec3-1
+  field_dec
+field_dec1-1
+line -- 2 
+	type-boolean
+ identifier a
+field_dec2-1
+field_dec3-2
+ field_dec
+field_dec1-1
+line -- 3 
+	method_dec1-2
+ type-boolean
+method_dec2-1
+  identifier main
+    type-int
+ identifier a
+ method_dec3
+method_dec4-2
+   type-boolean
+ identifier b
+ method_dec3
+method_dec4-1
+   line -- 4 
+	 line -- 5 
+		type-int
+ identifier a
+identifier b
+identifier c
+ var decleration
+ type-boolean
+ identifier b
+ var decleration
+line -- 6 
+		block
+statement- type 8 - block
+ line -- 7 
+		identifier a124
+ location-type1
+ ahem ahem 6465
+decimal int literal
+expr-t3-literal
+statement-type1
+line -- 8 
+		identifier a523
+ ahem ahem 351
+decimal int literal
+expr-t3-literal
+ahem ahem 523
+decimal int literal
+expr-t3-literal
+  char literal '
+expr-t3-literal
+  bool literal
+expr-t3-literal
+ method_call-type1
+ statement-type2-methodcall
+line -- 9 
+		  hoo hoo "aksd"
+string literal "aksd"
+  hoo hoo "sfasf"
+string literal "sfasf"
+callout arg - string
+callout arg p 2
+bool literal
+expr-t3-literal
+callout arg-expr
+callout arg p 1
+ahem ahem 2523
+decimal int literal
+expr-t3-literal
+callout arg-expr
+callout arg p 1
+char literal '
+expr-t3-literal
+callout arg-expr
+callout arg p 1
+  method_call-type2
+statement-type2-methodcall
+line -- 10 
+		  ahem ahem 64
+decimal int literal
+expr-t3-literal
+  block
+ statement-type3-if else
+line -- 11 
+		  ahem ahem 64
+decimal int literal
+expr-t3-literal
+  block
+  block
+else part
+statement-type3-if else
+line -- 12 
+		 identifier axaa
+  ahem ahem 564
+decimal int literal
+expr-t3-literal
+  ahem ahem 10000
+decimal int literal
+expr-t3-literal
+ block
+statement-type4 - for loop
+line -- 13 
+		  ahem ahem 45646
+decimal int literal
+expr-t3-literal
+  statement-type5 - return
+line -- 14 
+		statement-type6 - break
+line -- 15 
+		statement-type7 - continue
+line -- 16 
+		  identifier sadas
+ location-type1
+expr-t1
+statement-type5 - return
+line -- 17 
+		  identifier afhl
+ ahem ahem 4452
+decimal int literal
+expr-t3-literal
+method_call-type1
+expr-t2
+ statement-type5 - return
+line -- 18 
+		  ahem ahem 4566
+decimal int literal
+expr-t3-literal
+ statement-type5 - return
+line -- 19 
+		   ahem ahem 324
+decimal int literal
+expr-t3-literal
+  ahem ahem 465
+decimal int literal
+expr-t3-literal
+ahem ahem 56564
+decimal int literal
+expr-t3-literal
+ahem ahem 64
+decimal int literal
+expr-t3-literal
+expr-t4
+expr-t4
+ expr-t4
+ statement-type5 - return
+line -- 20 
+		   ahem ahem 456
+decimal int literal
+expr-t3-literal
+expr-t5
+ statement-type5 - return
+line -- 21 
+		 ahem ahem 556
+decimal int literal
+expr-t3-literal
+expr-t6
+statement-type5 - return
+line -- 22 
+		  ahem ahem 456
+decimal int literal
+expr-t3-literal
+expr-t7
+ statement-type5 - return
+line -- 23 
+	block
+method_dec
+method_dec1-1
+line -- 24 
+Parse Success
+line -- 25 

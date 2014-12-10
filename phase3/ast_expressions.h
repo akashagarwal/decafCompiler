@@ -1,11 +1,24 @@
 #include<bits/stdc++.h>
 //#include "ast_main.h"
+
+#include "llvm/IR/DerivedTypes.h"
+#include "llvm/IR/IRBuilder.h"
+#include "llvm/IR/LLVMContext.h"
+#include "llvm/IR/Module.h"
+
+static llvm::Module *TheModule;
+static  llvm::IRBuilder<> Builder( llvm::getGlobalContext());
+static std::map<std::string, llvm::Value*> NamedValues;
+
+
+
 using namespace std;
 
 class OPERATIONS;
 
 class EXPRESSION: public AST_MAIN_NODE {
-
+public:
+	double Val;
 };
 
 class EXPRESSION_LIST : public AST_MAIN_NODE {
@@ -123,9 +136,36 @@ class EXPRESSION_OPERATION : public EXPRESSION {
 	public:
 		EXPRESSION_OPERATION(EXPRESSION *e1 , OPERATIONS *oper , EXPRESSION *e2)
 		{
+
 			this->expr_left=e1;
 			this->expr_right=e2;
 			this->op=oper;
+
+			string Name="fn op plus";
+			cout << "\n\n\nGenerating LLVM IR...\n\n";
+			using namespace llvm;
+
+			std::vector<Type*> Doubles(2,Type::getDoubleTy(getGlobalContext()));
+  			FunctionType *FT = FunctionType::get(Type::getDoubleTy(getGlobalContext()),Doubles, false);
+  
+  			Function *F = Function::Create(FT, Function::ExternalLinkage, Name, TheModule);
+  
+  			unsigned Idx = 0;
+
+  			BasicBlock *BB = BasicBlock::Create(getGlobalContext(), "entry", F);
+  			Builder.SetInsertPoint(BB);
+
+  			Value * L =  ConstantFP::get(getGlobalContext(), APFloat(this->expr_left->Val));
+  			Value * R =  ConstantFP::get(getGlobalContext(), APFloat(this->expr_right->Val));
+  			Value * RetVal = Builder.CreateFAdd(L, R, "addtmp");
+  			
+  			Builder.CreateRet(RetVal);
+  
+
+
+			cout << "\n\n";
+			using namespace std;
+
 		}
 };
 

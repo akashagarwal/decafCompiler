@@ -14,9 +14,6 @@
 	#include "llvm/IR/LLVMContext.h"
 	#include "llvm/IR/Module.h"
 
-	static llvm::Module *TheModule;
-	static  llvm::IRBuilder<> Builder( llvm::getGlobalContext());
-	static std::map<std::string, llvm::Value*> NamedValues;
 
 %}
 

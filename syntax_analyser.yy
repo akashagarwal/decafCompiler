@@ -1,6 +1,7 @@
 %{
 	#include<stdio.h>
 	#include<stdlib.h>
+	#include<iostream>
 	#include "llvm/IR/DerivedTypes.h"
 	#include "llvm/IR/IRBuilder.h"
 	#include "llvm/IR/LLVMContext.h"
@@ -10,12 +11,19 @@
 	void yyerror(const char*);
 	extern int yylex();
 	extern int line;
+
+	static Module *TheModule;
+	static IRBuilder<> Builder(getGlobalContext());
+	static std::map<std::string, Value*> NamedValues;
+
 %}
 
 %union{
 	int int_val;
 	char char_val;
 	char *str_val;
+
+
 }
 
 %token PROGRAM BOOLEAN BREAK CALLOUT CLASS CONTINUE ELSE FOR IF INT RETURN TRUE FALSE VOID GT LT GE LE EQ NE AND OR IDENTIFIER PEQ MEQ
@@ -113,7 +121,7 @@ expr_x : expr_x ',' expr  | expr
 expr : location {printf("expr-t1\n");}
 			| method_call {printf("expr-t2\n");}
 			| literal {printf("expr-t3-literal\n");}
-			|  '(' expr bin_op expr ')' {printf("expr-t4\n");}
+			| expr bin_op expr {printf("expr-t4\n"); }
 			| '-' '(' expr ')' {printf("expr-t5\n");}
 			| '!' '(' expr ')' {printf("expr-t6\n");}
 			| '(' expr ')'  {printf("expr-t7\n");}

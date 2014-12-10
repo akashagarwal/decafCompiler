@@ -57,8 +57,7 @@ WS		{/*NO ACTION TO BE TAKEN FOR WHITESPACES*/}
 			return STR_LIT;
 		}
 
-">"		{return GT;}
-"<"		{return LT;}
+
 "<="		{return LE;}
 ">="		{return GE;}
 "=="		{return EQ;}
@@ -69,7 +68,8 @@ WS		{/*NO ACTION TO BE TAKEN FOR WHITESPACES*/}
 "+="		{return PEQ;}
 "-="		{return MEQ;}
 
-
+">"	|	
+"<"	|
 "+" |
 "-" |
 "*" |
